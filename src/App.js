@@ -1,26 +1,53 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import './reset.css';
+import axios from "axios";
+import { HashRouter } from "react-router-dom";
+import routes from './routes';
+import Header from './Components/Header/Header'
+// import Dashboard from './Components/Dashboard/Dashboard'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      list: [],
+      // list:"inventory"
+    };
+  }
+  render() {
+    return (
+      <form>
+      <HashRouter>
+        <div className="App">
+          <Header />
 
-export default App;
+          {routes}
+        </div>
+      </HashRouter>
+      
+        onSubmit={e => {
+          e.preventDefault();
+          axios.get("/api/inventory", {
+            image: this.state.image,
+            event: this.state.name,
+            date: this.state.price
+          })
+            .then(response => {
+              this.props.changeSection();
+            })
+            .catch(error => {
+              this.setState({ error: "an error ocurred" });
+            });
+           
+        }}
+         </form>
+        
+        );
+       
+      }
+    
+    }
+    
+    
+    export default App;
